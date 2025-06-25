@@ -19,14 +19,14 @@ config = "celestria.mixins.json"
 [[dependencies.celestria]]
 modId = "neoforge"
 mandatory = true
-versionRange = "[21.0,)"
+versionRange = "[21.6,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.celestria]]
 modId = "minecraft"
 mandatory = true
-versionRange = "[1.21,)"
+versionRange = "[1.21.6,)"
 ordering = "NONE"
 side = "BOTH"
 

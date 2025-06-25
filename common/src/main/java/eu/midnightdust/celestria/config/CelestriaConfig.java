@@ -17,6 +17,7 @@ public class CelestriaConfig extends MidnightConfig {
     @Entry(category = STARS, isSlider = true, min = 0, max = 500) public static int shootingStarPathLength = 50;
     @Entry(category = STARS) public static int shootingStarChance = 20000;
     @Entry(category = STARS) public static int shootingStarLuckDuration = 1000;
+    @Entry(category = STARS, min = 4) public static int shootingStarPhaseCycle = 60;
     @Entry(category = STARS) public static List<String> shootingStarMessages = Lists.newArrayList("celestria.shootingStar.1", "celestria.shootingStar.2", "celestria.shootingStar.3");
     @Entry(category = INSOMNIA) public static boolean enableInsomnia = true;
     @Entry(category = INSOMNIA) public static int insomniaChance = 30000;
