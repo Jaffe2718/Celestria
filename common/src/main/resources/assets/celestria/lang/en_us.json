@@ -13,6 +13,7 @@
 	"celestria.midnightconfig.shootingStarChance": "Chance",
 	"celestria.midnightconfig.shootingStarLuckDuration": "Luck Duration",
 	"celestria.midnightconfig.shootingStarMessages": "Messages",
+	"celestria.midnightconfig.shootingStarPhaseCycle": "Phase Cycle Duration (in ticks)",
 	"celestria.midnightconfig.enableInsomnia": "Enable Insomnia",
 	"celestria.midnightconfig.insomniaChance": "Chance",
 	"celestria.midnightconfig.insomniaMessages": "Messages",
