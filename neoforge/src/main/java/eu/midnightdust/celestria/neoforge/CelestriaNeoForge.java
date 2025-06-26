@@ -3,14 +3,13 @@ package eu.midnightdust.celestria.neoforge;
 import eu.midnightdust.celestria.Celestria;
 import eu.midnightdust.celestria.CelestriaClient;
 import eu.midnightdust.celestria.effect.StatusEffectInit;
-import net.minecraft.registry.BuiltinRegistries;
 import net.minecraft.registry.Registries;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import org.jetbrains.annotations.NotNull;
 
 import static eu.midnightdust.celestria.Celestria.MOD_ID;
 import static eu.midnightdust.celestria.Celestria.id;
@@ -27,10 +26,10 @@ public class CelestriaNeoForge {
             CelestriaClient.init();
         }
     }
-    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-    public class GameEvents {
+    @EventBusSubscriber(modid = MOD_ID)
+    public static class GameEvents {
         @SubscribeEvent
-        public static void register(RegisterEvent event) {
+        public static void register(@NotNull RegisterEvent event) {
             event.register(
                     Registries.STATUS_EFFECT.getKey(),
                     registry -> {

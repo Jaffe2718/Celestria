@@ -1,6 +1,7 @@
 package eu.midnightdust.celestria.util.neoforge;
 
 import eu.midnightdust.lib.util.PlatformFunctions;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.NetworkSide;
 import net.minecraft.network.RegistryByteBuf;
@@ -22,34 +23,41 @@ public class PacketUtilsImpl {
     static Map<CustomPayload.Id, PayloadStorage> payloads = new HashMap<>();
     private record PayloadStorage <T extends CustomPayload> (boolean client, boolean server, PacketCodec<RegistryByteBuf, T> codec, BiConsumer<CustomPayload, PlayerEntity> clientReceiver, BiConsumer<CustomPayload, PlayerEntity> serverReceiver) {}
     // Common
+    @SuppressWarnings("unused")
     public static <T extends CustomPayload> void registerPayloadCommon(CustomPayload.Id<T> id, PacketCodec<RegistryByteBuf, T> codec) {
         payloads.put(id, new PayloadStorage<>(true, true, codec, (p, e) -> {}, (p, e) -> {}));
     }
 
     // Server
+    @SuppressWarnings("unused")
     public static <T extends CustomPayload> void registerPayloadS2C(CustomPayload.Id<T> id, PacketCodec<RegistryByteBuf, T> codec) {
         payloads.put(id, new PayloadStorage<>(false, true, codec, (p, e) -> {}, (p, e) -> {}));
     }
+    @SuppressWarnings("unused")
     public static void sendPlayPayloadS2C(ServerPlayerEntity player, CustomPayload payload) {
         player.networkHandler.send(payload);
     }
+    @SuppressWarnings("unused")
     public static void registerServerGlobalReceiver(CustomPayload.Id<?> type, BiConsumer<CustomPayload, PlayerEntity> code) {
         payloads.compute(type, (k, data) -> new PayloadStorage<>(data.client, data.server, data.codec, data.clientReceiver, code));
     }
 
     // Client
+    @SuppressWarnings("unused")
     public static <T extends CustomPayload> void registerPayloadC2S(CustomPayload.Id<T> id, PacketCodec<RegistryByteBuf, T> codec) {
         payloads.put(id, new PayloadStorage<>(true, false, codec, (p, e) -> {}, (p, e) -> {}));
     }
+    @SuppressWarnings("unused")
     public static void sendPlayPayloadC2S(CustomPayload payload) {
-        if (PlatformFunctions.isClientEnv() && ClientUtilsImpl.client.getNetworkHandler() != null) ClientUtilsImpl.client.getNetworkHandler().send(payload);
+        if (PlatformFunctions.isClientEnv() && MinecraftClient.getInstance().getNetworkHandler() != null) MinecraftClient.getInstance().getNetworkHandler().send(payload);
     }
+    @SuppressWarnings("unused")
     public static void registerClientGlobalReceiver(CustomPayload.Id<?> type, BiConsumer<CustomPayload, PlayerEntity> code) {
         payloads.compute(type, (k, data) -> new PayloadStorage<>(data.client, data.server, data.codec, code, data.serverReceiver));
     }
 
-    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD)
-    public class CommonEvents {
+    @EventBusSubscriber(modid = MOD_ID)
+    public static class CommonEvents {
         @SubscribeEvent
         public static void registerPayloads(RegisterPayloadHandlersEvent event) {
             PayloadRegistrar registrar = event.registrar("1");
