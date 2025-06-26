@@ -1,6 +1,5 @@
 package eu.midnightdust.celestria.util.neoforge;
 
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -16,12 +15,13 @@ public class CommonUtilsImpl {
     static Set<Consumer<World>> startWorldTickEvents = new HashSet<>();
     static Set<Consumer<World>> endWorldTickEvents = new HashSet<>();
 
+    @SuppressWarnings("unused")
     public static void registerWorldTickEvent(boolean endTick, Consumer<World> code) {
         if (endTick) endWorldTickEvents.add(code);
         else startWorldTickEvents.add(code);
     }
-    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.GAME)
-    public class GameEvents {
+    @EventBusSubscriber(modid = MOD_ID)
+    public static class GameEvents {
         @SubscribeEvent
         public static void startWorldTick(LevelTickEvent.Pre event) {
             startWorldTickEvents.forEach(code -> code.accept(event.getLevel()));
