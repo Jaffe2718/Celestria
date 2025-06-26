@@ -22,7 +22,7 @@ public class ShootingStar {
     public void tick() {
         --progress;
         phaseScore++;
-        phaseScore %= 100;
+        phaseScore %= CelestriaConfig.shootingStarPhaseCycle;
     }
 
     /**

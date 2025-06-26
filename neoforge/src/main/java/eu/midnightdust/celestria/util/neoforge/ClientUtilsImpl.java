@@ -18,6 +18,7 @@ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforgespi.locating.IModFile;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -30,25 +31,27 @@ import java.util.function.Consumer;
 import static eu.midnightdust.celestria.Celestria.MOD_ID;
 
 public class ClientUtilsImpl {
-    public final static MinecraftClient client = MinecraftClient.getInstance();
     static List<Identifier> packsToRegister = new ArrayList<>();
     static List<BiConsumer<ClientPlayNetworkHandler, MinecraftClient>> disconnectHandlers = new ArrayList<>();
     static Set<Consumer<MinecraftClient>> endClientTickEvents = new HashSet<>();
     static Set<Consumer<MinecraftClient>> startClientTickEvents = new HashSet<>();
 
+    @SuppressWarnings("unused")
     public static void registerBuiltinResourcePack(Identifier id) {
         packsToRegister.add(id);
     }
+    @SuppressWarnings("unused")
     public static void registerClientTick(boolean endTick, Consumer<MinecraftClient> code) {
         if (endTick) endClientTickEvents.add(code);
         else startClientTickEvents.add(code);
     }
+    @SuppressWarnings("unused")
     public static void registerDisconnectEvent(BiConsumer<ClientPlayNetworkHandler, MinecraftClient> code) {
         disconnectHandlers.add(code);
     }
 
-    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public class ClientEvents {
+    @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
+    public static class ClientEvents {
         @SubscribeEvent
         public static void addPackFinders(AddPackFindersEvent event) {
             if (event.getPackType() == ResourceType.CLIENT_RESOURCES) {
@@ -70,19 +73,19 @@ public class ClientUtilsImpl {
             }));
         }
     }
-    @EventBusSubscriber(modid = MOD_ID, bus = EventBusSubscriber.Bus.GAME, value = Dist.CLIENT)
-    public class ClientGameEvents {
+    @EventBusSubscriber(modid = MOD_ID, value = Dist.CLIENT)
+    public static class ClientGameEvents {
         @SubscribeEvent
-        public static void onDisconnect(ClientPlayerNetworkEvent.LoggingOut event) {
-            if (event.getPlayer() != null) disconnectHandlers.forEach(handler -> handler.accept(event.getPlayer().networkHandler, client));
+        public static void onDisconnect(ClientPlayerNetworkEvent.@NotNull LoggingOut event) {
+            if (event.getPlayer() != null) disconnectHandlers.forEach(handler -> handler.accept(event.getPlayer().networkHandler, MinecraftClient.getInstance()));
         }
         @SubscribeEvent
         public static void startClientTick(ClientTickEvent.Pre event) {
-            startClientTickEvents.forEach(code -> code.accept(client));
+            startClientTickEvents.forEach(code -> code.accept(MinecraftClient.getInstance()));
         }
         @SubscribeEvent
         public static void endClientTick(ClientTickEvent.Pre event) {
-            endClientTickEvents.forEach(code -> code.accept(client));
+            endClientTickEvents.forEach(code -> code.accept(MinecraftClient.getInstance()));
         }
     }
 }

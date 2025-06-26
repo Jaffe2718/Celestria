@@ -32,7 +32,7 @@ public class CelestriaClient {
         ClientUtils.registerClientTick(true, (client) -> {
             shootingStars.forEach(ShootingStar::tick);
             shootingStars.removeAll(shootingStars.stream().filter(star -> star.progress <= 0).toList());
-            if (CelestriaClient.clientOnlyMode && CelestriaConfig.enableShootingStars && client.world != null) {
+            if (CelestriaClient.clientOnlyMode && CelestriaConfig.enableShootingStars && client != null && client.world != null) {
                 float tickDelta = client.getRenderTickCounter().getDynamicDeltaTicks();
                 if ((180 < client.world.getSkyAngle(tickDelta) * 360 && 270 > client.world.getSkyAngle(tickDelta) * 360) && random.nextInt(Celestria.getChance(client.world)) == 0) {
                     shootingStars.add(new ShootingStar(CelestriaConfig.shootingStarPathLength, random.nextInt(3), random.nextBetween(100, 150), random.nextInt(360), random.nextBetween(10, 170), random.nextBetween(Math.min(CelestriaConfig.shootingStarMinSize, CelestriaConfig.shootingStarMaxSize), Math.max(CelestriaConfig.shootingStarMaxSize, CelestriaConfig.shootingStarMinSize))));
